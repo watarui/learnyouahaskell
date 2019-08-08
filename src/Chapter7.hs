@@ -516,3 +516,69 @@ instance YesNo TrafficLight where
 yesnoIf :: (YesNo y) => y -> a -> a -> a
 yesnoIf yesnoVal yesResult noResult =
     if yesno yesnoVal then yesResult else noResult
+
+-- 7.10 Functor 型クラス
+
+-- 写像 ex. map
+
+{-
+class Functor f where -- f は具体型ではなく型コンストラクタ
+    fmap :: (a -> b) -> f a -> f b
+-}
+
+{-
+instance Functor [] where -- [] は型コンストラクタ
+    fmap = map
+-}
+
+-- 7.10.1 Maybe
+
+{-
+instance Functor Maybe where
+    fmap f (Just x) = Just (f x)
+    fmap f Nothing  = Nothing
+-}
+
+{-
+> fmap (*2) (Just 200)
+Just 400
+> fmap (*2) Nothing
+Nothing
+-}
+
+-- 7.10.2 Tree
+
+instance Functor Tree where
+    fmap f EmptyTree           = EmptyTree
+    fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
+
+{-
+> foldr treeInsert EmptyTree [5,7,3]
+Node 3 EmptyTree (Node 7 (Node 5 EmptyTree EmptyTree) EmptyTree)
+-}
+
+-- 7.10.3 Either
+
+{-
+-- in Control.Monad.Instances
+instance Functor (Either a) where
+    fmap f (Right x) = Right (f x)
+    fmap f (Left  x) = Left x
+-}
+
+-- 7.11 種類（kind）
+
+{-
+> :k Int
+Int :: *
+-- * は具体型を表す
+> :k Maybe
+Maybe :: * -> *
+-- 1つの具体型を引数にとって、具体型を返す型コンストラクタ
+> :k Either
+Either :: * -> * -> *
+> :k Either String
+Either String :: * -> *
+> :k Either String Int
+Either String Int :: *
+-}
