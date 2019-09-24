@@ -1,9 +1,5 @@
 import           System.IO
 
-main = do
-    -- type FilePath = String -- 型シノニム
-    -- data IOMode = ReadMode | WriteMode | AppendMode | ReadWriteMode -- 列挙型
-    handle   <- openFile "haiku.txt" ReadMode
+main = withFile "haiku.txt" ReadMode $ \handle -> do
     contents <- hGetContents handle
     putStr contents
-    hClose handle
