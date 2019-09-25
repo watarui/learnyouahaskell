@@ -1,44 +1,35 @@
+library:
+    source-dirs: src
+tests:
+    learnyouahaskell-test:
+        source-dirs: test
+        main: Spec.hs
+        ghc-options:
+            - -threaded
+            - -rtsopts
+            - -with-rtsopts=-N
+        dependencies:
+            - learnyouahaskell
+dependencies:
+    - directory
+    - base >= 4.7 && < 5
+    - containers
+    - directory
+    - random
+    - bytestring
 name: learnyouahaskell
 version: 0.1.0.0
-
 extra-source-files:
     - README.md
     - ChangeLog.md
-
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description: Please see the README
-
-dependencies:
-    - base >= 4.7 && < 5
-    - containers
-
-library:
-    source-dirs: src
-
 executables:
     learnyouahaskell-exe:
-        main: Main.hs
         source-dirs: app
+        main: Main.hs
         ghc-options:
             - -threaded
             - -rtsopts
             - -with-rtsopts=-N
         dependencies:
             - learnyouahaskell
-
-tests:
-    learnyouahaskell-test:
-        main: Spec.hs
-        source-dirs: test
-        ghc-options:
-            - -threaded
-            - -rtsopts
-            - -with-rtsopts=-N
-        dependencies:
-            - learnyouahaskell
+description: Please see the README

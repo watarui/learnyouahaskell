@@ -1,5 +1,7 @@
 module Chapter9 where
 
+import qualified Data.ByteString.Lazy          as B
+import qualified Data.ByteString               as S
 import           System.Random
 
 threeCoins :: StdGen -> (Bool, Bool, Bool)
@@ -33,14 +35,14 @@ Ok, one module loaded.
 randoms' :: (RandomGen g, Random a) => g -> [a]
 randoms' gen = let (value, newGen) = random gen in value : randoms' newGen
 
-finiteRandoms :: (RandomGen g, Random a, Num n) => n -> g -> ([a], g)
+finiteRandoms :: (RandomGen g, Random a, Num n, Eq n) => n -> g -> ([a], g)
 finiteRandoms 0 gen = ([], gen)
 finiteRandoms n gen =
     let (value     , newGen  ) = random gen
         (restOfList, finalGen) = finiteRandoms (n - 1) newGen
     in  (value : restOfList, finalGen)
 
-randomR' :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
+-- randomR' :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
 
 {-
 > randomR (1, 6) (mkStdGen 359353)
@@ -49,4 +51,26 @@ randomR' :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
 (3,1250031057 40692)
 > take 10 $ randomRs ('a','z') (mkStdGen 3) :: [Char]
 "xnuhlfwywq"
+-}
+
+-- 9.7 bytestring
+-- サンク（thunk）: プロミスのままで未評価の部分
+-- bytestring: リストににたデータ構造で、要素は1byte or 8bit
+-- 遅延bytestringは64Kbyteのchunkという塊に格納する。
+-- Word8型: 8ビット符号なし整数 0-255
+
+{-
+> B.pack [99,97,110]
+"can"
+> B.pack [98..120]
+"bcdefghijklmnopqrstuvwx"
+> by = B.pack [98,111,114,116]
+> by
+"bort"
+> B.unpack by
+[98,111,114,116]
+> B.fromChunks [S.pack [40,41,42], S.pack [43,44,45], S.pack [46,47,48]]
+"()*+,-./0"
+> B.cons 85 $ B.pack [80,81,82,84]
+"UPQRT"
 -}

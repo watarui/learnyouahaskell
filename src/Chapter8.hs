@@ -1,4 +1,4 @@
--- module Chapter8 where
+module Chapter8 where
 
 import           Control.Monad
 import           Data.Char
